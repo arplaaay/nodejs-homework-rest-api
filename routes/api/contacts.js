@@ -4,13 +4,19 @@ const Joi = require("joi");
 
 const contacts = require("../../models/contacts");
 
-const schema = Joi.object({
+const defaultSchema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
   phone: Joi.string().required(),
 });
+
+const putSchema = Joi.object({
+  name: Joi.string().alphanum().min(3).max(30),
+  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }),
+  phone: Joi.string(),
+}).min(1);
 
 router.get("/", async (req, res, next) => {
   const listOfAllContacts = await contacts.listContacts();
@@ -30,7 +36,7 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { error } = schema.validate(req.body);
+  const { error } = defaultSchema.validate(req.body);
 
   if (error) {
     res.json(error.details);
@@ -53,7 +59,7 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const { error } = schema.validate(req.body);
+  const { error } = putSchema.validate(req.body);
 
   if (error) {
     return res.json(error.details);
