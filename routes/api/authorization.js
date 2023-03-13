@@ -1,0 +1,19 @@
+const express = require("express");
+
+const controllers = require("../../controllers/users/index");
+const controllerWrapper = require("../../helpers/controllerWrapper");
+const { schemas } = require("../../models/users");
+const validation = require("../../helpers/validation");
+const checkToken = require("../../middlewares/checkToken");
+
+const router = express.Router();
+
+router.post("/register", validation(schemas.registerSchema), controllerWrapper(controllers.userRegister));
+
+router.post("/login", validation(schemas.loginSchema), controllerWrapper(controllers.userLogin));
+
+router.post("/logout", checkToken, controllerWrapper(controllers.userLogout));
+
+router.post("/current", checkToken, controllerWrapper(controllers.currentUser));
+
+module.exports = router;

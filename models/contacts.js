@@ -16,6 +16,10 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+  },
 });
 
 const defaultSchema = Joi.object({
@@ -42,7 +46,7 @@ const schemas = {
   patchSchema,
 };
 
-const Contact = mongoose.model("Contact", contactSchema);
+const Contact = mongoose.model("contact", contactSchema);
 
 module.exports = {
   Contact,
