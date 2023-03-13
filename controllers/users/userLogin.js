@@ -18,6 +18,10 @@ const userLogin = async (req, res) => {
     return res.json({ message: "Invalid email or password" });
   }
 
+  if (!findUser.verify) {
+    return res.json({ message: `You have not verified your email: ${findUser.email}` });
+  }
+
   const payload = {
     _id: findUser._id,
   };
