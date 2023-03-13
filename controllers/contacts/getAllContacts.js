@@ -3,6 +3,8 @@ const { Contact } = require("../../models/contacts");
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
 
+  console.log(owner);
+
   const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
 
