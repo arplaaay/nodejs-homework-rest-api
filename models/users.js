@@ -24,6 +24,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, "Verify token is required"],
+  },
 });
 
 const loginSchema = Joi.object({
@@ -44,9 +52,16 @@ const registerSchema = Joi.object({
   token: Joi.string(),
 });
 
+const verifyEmailSchema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
+});
+
 const schemas = {
   loginSchema,
   registerSchema,
+  verifyEmailSchema,
 };
 
 const User = mongoose.model("user", userSchema);
